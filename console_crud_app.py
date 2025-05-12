@@ -15,7 +15,6 @@ menu = '''
 4. Удалить пользователя
 5. Удалить нескольких пользователей
 6. Обновить данные пользователя
-7. Поиск пользователей
 =============================
 0. Выйти'''
 
@@ -63,13 +62,19 @@ while True:
             print(f'Пользователь {user_id} удален') if deleted else print(f'Пользователь {user_id} не найден')
 
         case '5':
+            ids_input = input('Введите ID пользователей (числа через пробел, запятую или другой разделитель): ').strip()
+            # Ищем все последовательности цифр (\d+) во введенной строке
+            ids = re.findall(r'\d+', ids_input)
+            if not ids:
+                print('Ошибка: не найдено ни одного числового ID')
+                continue
+            
             try:
-                ids = input('Введите ID пользователей через пробел: ').split()
                 user_ids = tuple(int(id) for id in ids)
             except ValueError:
-                print('Ошибка: ID должны быть числами')
+                print('Ошибка: не удалось преобразовать в числа')
                 continue
-
+            
             deleted_count = delete_users_many(connection, user_ids)
             print(f'Удалено пользователей: {deleted_count}')
 
@@ -77,27 +82,27 @@ while True:
             db_update_user(connection)
 
 
-        case '7':
-            print('Введите параметры поиска (оставьте пустым для игнорирования)')
-            last_name = input('Фамилия: ').strip()
-            first_name = input('Имя: ').strip()
-            email = input('Email: ').strip()
+        # case '7':
+        #     print('Введите параметры поиска (оставьте пустым для игнорирования)')
+        #     last_name = input('Фамилия: ').strip()
+        #     first_name = input('Имя: ').strip()
+        #     email = input('Email: ').strip()
 
-            try:
-                limit = int(input('Лимит результатов (по умолчанию 5): ') or 5)
-                offset = int(input('Смещение (по умолчанию 0): ') or 0)
-            except ValueError:
-                print('Ошибка: лимит и смещение должны быть числами')
-                continue
+        #     try:
+        #         limit = int(input('Лимит результатов (по умолчанию 5): ') or 5)
+        #         offset = int(input('Смещение (по умолчанию 0): ') or 0)
+        #     except ValueError:
+        #         print('Ошибка: лимит и смещение должны быть числами')
+        #         continue
 
-            search_data = {
-                'last_name': last_name,
-                'first_name': first_name,
-                'email': email
-            }
+        #     search_data = {
+        #         'last_name': last_name,
+        #         'first_name': first_name,
+        #         'email': email
+        #     }
 
-            users = user_search(connection, search_data, limit, offset)
-            pu.print_users(users) if users else print('Пользователи не найдены')
+        #     users = user_search(connection, search_data, limit, offset)
+        #     pu.print_users(users) if users else print('Пользователи не найдены')
 
         case _:
             print('Неверная команда')

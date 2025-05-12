@@ -31,7 +31,7 @@ def print_users(users_data: list) -> None:
             fill(user[1] if user[1] else '', width=15),  # first_name
             fill(user[3] if user[3] else '-', width=15),  # middle_name
             fill(user[4], width=25),  # email
-            '*' * 8 if user[5] else ''  # password (скрываем реальный пароль)
+            fill(user[5], width=15)  # password 
         ], divider=True)
     
     print(table.get_string())

@@ -73,20 +73,7 @@ def user_search(
     sort_field: str = 'user_id',
     include_password: bool = False  # По умолчанию не возвращаем пароль
 ) -> list:
-    """Поиск пользователей с фильтрацией
     
-    Args:
-        connection: Подключение к БД
-        search_data: Словарь параметров поиска (может содержать first_name, last_name, 
-                    middle_name, email)
-        limit: Максимальное количество результатов
-        offset: Смещение для пагинации
-        sort_field: Поле для сортировки
-        include_password: Включать ли пароль в результаты (не рекомендуется)
-    
-    Returns:
-        Список найденных пользователей
-    """
     cursor = connection.cursor()
     
     # Определяем поля для выборки
